@@ -53,7 +53,7 @@ SDK는 Vehicle Plus 블로그에 공개되어 있으며, aar파일의 형태로 
 > NOTE : SDK를 사용하는 예제 소스는 [Github](https://github.com/vehicleplus/vehicleplus.github.io)에 오픈소스로 공개되어 있습니다. 빠르게 사용하기 위해서는 Github에 방문하여 Hello Vehicleplus를 다운받아 사용하시길 바랍니다.  
 [https://github.com/vehicleplus/hello-vehicleplus](https://github.com/vehicleplus/hello-vehicleplus)
 
-<h4> 6.1 설치방법
+<h4> 6.1. 설치방법</h4>
 일반적인 aar 라이브러리의 추가 방법과 동일합니다. 이 문서에서는 초기 버전인 0.0.1 버전기준으로 설명하고, 안드로이드 3.3.2 버전 기준으로 설명합니다.
 
 블로그에서 vehicleplus-sdk-android-0.0.1.aar를 다운로드 받습니다. <br>
@@ -61,3 +61,36 @@ SDK는 Vehicle Plus 블로그에 공개되어 있으며, aar파일의 형태로 
 안드로이드 스튜디오에서 Project 탭에서 app\libs 폴더에 다운로드된 aar파일을 추가합니다. <br>
 
 ![](/resources/images/library_manual_image_01.png)
+
+>NOTE : aar 파일을 정상적으로 반영하기 위해 Sync Project with Gradle Files를 확인해주십시오. 그렇지 않으면 SDK를 정상적으로 사용할 수 없습니다.
+
+<h4>6.2. Project의 build.gradle에 libs 폴더 추가하기 </h4>
+aar 파일을 사용하기 위해 app/build.gradle에 추가해줘야 합니다. aar 파일을 추가하는 방법은 다음과 같습니다. 버전명은 예제와 다를 수 있으므로 다운받은 버전과 확인하여 변경해주세요.
+
+<pre><code>
+allprojects {
+	repositories {
+		google()
+		jcenter()
+		flatDir {
+			dirs 'libs'
+		}
+	}
+}
+</code></pre>
+
+<h4>6.3. Module:app의 build.gradle에 aar library 추가하기</h4>
+
+<pre><code>
+dependencies {
+	implementation 'com.awesomeit.vehicleplus.library:vehicleplus-sdk-android-0.0.1@aar'
+}
+</code></pre>
+
+### 7. Hello Vehicle Plus
+<h4> 7.1. 리스너 설치하기</h4>
+비이클 플러스에서 데이터를 수신하기 위해서는 데이터 수신을 하기 위한 리스너를 연결해줘야 합니다. 크게 2가지의 리스너가 있으며, 인터페이스로 구현되어 있으므로 사용할 클래스에 implements 해주면 됩니다.
+
+>NOTE : 예제에서는 사용법을 안내하기 위해 MainActivity에 Interface를 연결하였습니다.
+
+<h4> 7.2 기본적인 SDK의 동작 설명</h4>
