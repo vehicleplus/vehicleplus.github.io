@@ -275,3 +275,58 @@ public class MainActivity extends AppCompatActivity implements VehicleDataListen
 	}
 }
 </code></pre>
+
+비이클 플러스에서 블루투스가 연결된 경우 onBluetoothConnected에 연결된 BluetoothDeviceInfo가 수신됩니다. VPBluetoothDeviceInfo 클래스는 Getter 메서드로 연결된 블루투스의 MacAddress를 얻을 수 있습니다.
+블루투스의 상태가 변경될 때 마다 onBluetoothChanged에 Notify가 수신됩니다.
+
+<h4>7.11. 선택된 차량정보 수신하기</h4>
+ConnectionListener에는 선택된 차량정보를 수신할 수 있는 콜백메서드가 존재합니다.  
+VehicleManager를 통해 getVehicleInfo를 호출하면, 현재 비이클 플러스에서 선택된 차량정보를 콜백메서드로 수신이 가능합니다.
+
+<pre><code>
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import com.awesomeit.vehicleplus.library.api.VehicleDataListener;
+
+public class MainActivity extends AppCompatActivity implements VehicleDataListener {
+	@Override  
+	protected void onCreate(Bundle savedInstanceState) {  
+		super.onCreate(savedInstanceState);  
+		setContentView(R.layout.activity_main);  
+	}
+  
+	@Override  
+	public void onSelectedVehicleInfo(VPVehicleInfo vpVehicleInfo){  
+		// Here your application codes..  
+	}
+}
+</code></pre>
+
+<h4>7.12. onEventListener </h4>
+ConnectionListener에서는 onEventListener(String, String) 콜백메서드도 구현해야합니다. 이 Event는 SDK의 하위호환성을 위해 생성한것으로 당장 사용되지는 않습니다.
+
+<h4>7.13. 에이전트앱의 기능 사용하기</h4>
+
+* 블루투스 설정하기
+* 차량설정하기
+* 지원 데이터 보기
+* 통신 속도 설정하기
+* 로그 보내기
+
+인증하기까지의 초기화 작업을 정상적으로 수행하면, 이후부터는 에이전트앱의 기능들을 사용할 수 있습니다.<br>
+에이전트앱의 기능은 순서에 상관없이 원하는대로 사용이 가능합니다.
+공개된 버전에서의 해당기능은 SDK의 코드레벨에서의 접근이 아닌, 에이전트앱의 화면을 불러와서 기능을 수행하는 방법을 사용합니다.
+
+> NOTE : 블루투스 어댑터 설정 및 차량정보를 설정하지 않은 상태에서는 SDK의 데이터 통신이 정상적으로 작동되지 않습니다.
+
+에이전트앱의 화면을 불러오는 메서드는 모두 startDisplay(DisplayType) 을 이용합니다. DisplayType은 다음과 같이 정리되어 있습니다.
+
+<pre><code>
+public class DisplayType {
+	public static final int DISPLAY_VEHICLE_SETTING = 0;
+	public static final int DISPLAY_SUPPORTED_VEHICLEDATA = 1;
+	public static final int DISPLAY_BLUETOOTH_SETTING = 2;
+}
+</code></pre>
+
+>NOTE : 이후에 업데이트 되는 버전에 따라 DisplayType의 기능은 지속적으로 추가될 예정입니다. 버전마다 다를 수 있으니 제공되는 SDK의 DisplayType을 확인하시길 바랍니다.
