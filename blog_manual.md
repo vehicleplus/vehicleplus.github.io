@@ -210,3 +210,68 @@ public class MainActivity extends AppCompatActivity implements VehicleDataListen
 	}
 }
 </code></pre>
+
+비이클 플러스 에이전트앱에 연결 후 subscribe(VehicleDataRequest, VehicleDataListener)를 이용하여 데이터를 수신할 수 있습니다. subscribe 메서드를 호출하고 에이전트앱에 정상적으로 연결되어 있다면, onDataReceived(VPVehicleDataTable) 메서드가 콜백됩니다. 에이전트앱이 데이터 통신 성공을 하면 HashMap 형태의 Paramter에 데이터가 전달되며, 사용자는 이 객체를 원하는 형태로 사용하면 됩니다.
+
+<h4>7.8. VehicleDataRequest 만들기</h4>
+subscribe를 호출하기전에 비이클 플러스에게 요청할 데이터 리스트를 작성해야 합니다.<br>
+SDK에서는 VehicleDataRequest 클래스를 제공하고 여기에 addDataElement를 통해 원하는 데이터를 지정하여 사용할 수 있습니다.<br>
+VehicleDataRequest 사용법은 build 패턴을 이용하여 간단히 사용할 수 있으며 예제 코드는 다음과 같습니다.
+
+<pre><code>
+private void getVehicleData() {
+	VehicleDataRequest request = new VehicleDataRequest.Builder()  
+			.addDataElement(VehicleData.Diesel.soot) // testing not supported.  
+			.addDataElement(VehicleData.Battery.battery_charge_current)  
+			.addDataElement(VehicleData.Battery.battery_charge_remain)  
+			.build();  
+}
+</code></pre>
+>NOTE : addDataElement(VehicleData) 및 addDataElementGroup(int[])로 데이터 리스트를 추가할 수 있습니다.
+
+<h4>7.9. 데이터 수신하기</h4>
+VehicleDataRequest와 VehicleDataListener를 정상적으로 설치하였으면 subscribe와 start를 통해 데이터 수신을 시작할 수 있습니다. 중단은 반드시 disconnect 메서드를 이용해 중단해야 합니다.
+
+<pre><code>
+private  void  getVehicleData() {
+
+	VehicleDataRequest request = new VehicleDataRequest.Builder()  
+				.addDataElement(VehicleData.Diesel.soot)
+				.addDataElement(VehicleData.Battery.battery_charge_current)  
+				.addDataElement(VehicleData.Battery.battery_charge_remain)  
+				.build();
+
+	mVehicleManager.subscribe(request, this);
+	mVehicleManager.start();
+}
+</code></pre>
+
+>NOTE : 지정되지 않은 번호의 인덱스를 addDataElement에 추가할 수는 있지만, 적합하지 않으면 에이전트앱에서 해당 데이터는 발신하지 않습니다.
+
+<h4>7.10. 블루투스 기능 콜백 수신하기</h4>
+ConnectionListener에는 onConnected(), onConnectionFailed(VPResultInfo)외에 블루투스 연결 확인을 위한 콜백도 지원합니다. <br>
+비이클 플러스앱의 블루투스 연결상태를 파악할 수 있으며, 상태 변경에 대한 콜백수신이 가능합니다. 예제 코드는 다음과 같습니다.
+
+<pre><code>
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import com.awesomeit.vehicleplus.library.api.VehicleDataListener;
+
+public class MainActivity extends AppCompatActivity implements VehicleDataListener {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);  
+		setContentView(R.layout.activity_main);  
+	}
+  
+	@Override  
+	public void onBluetoothConnected(VPBluetoothDeviceInfo vpBluetoothDeviceInfo) {
+		// Here your application codes..  
+	}  
+
+	@Override  
+	public void onBluetoothChanged(VPResultInfo vpResultInfo) {
+		// Here your application codes..
+	}
+}
+</code></pre>
