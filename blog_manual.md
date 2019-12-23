@@ -7,9 +7,35 @@
 
 Google Play를 통해 제공되는 비이클 플러스는 일반 사용자에게 공개된 어플리케이션으로 차량과의 통신을 위해 필수적으로 설치되어야하며, 개발자는 이 문서와 함께 제공되는 SDK로 에이전트앱에 접근할 수 있습니다.
 
-비이클 플러스 앱 구글플레이 주소 :
+비이클 플러스 앱 구글플레이 주소 : <br>
 https://play.google.com/store/apps/details?id=com.awesomeit.vehicleplus
 
 비이클 플러스 앱의 설치방법은 Google Play에서 일반적인 앱을 설치하는 방법과 동일합니다. 위의 URL에서 설치를 선택해서 진행하면 간단하게 완료할 수 있습니다.
 
 > NOTE: 비이클 플러스 앱은 안드로이드 5.0 이상, 인터넷이 연결되어 있는 모바일에서만 지원합니다. 오프라인 환경에서만 사용가능한 프라이빗 버전은 관리자에게 별도로 문의해주시길 바랍니다.
+
+## 3. SDK 설치하기
+비이클 플러스앱을 설치하였으면, 비이클 플러스와 통신하기 위해 SDK를 설치해야합니다. SDK는 Java로 구현되어 있으며, 안드로이드 컴포넌트가 포함된 라이브러리로 구성되어 있습니다. SDK는 VehiclePlus 블로그에 공개되어 있으며, aar파일의 형태로 손쉽게 다운로드 받을 수 있습니다.
+
+비이클 플러스 SDK 다운로드 주소 : <br>
+https://github.com/vehicleplus/hello-vehicleplus
+
+## 4. 요구사항 확인하기
+비이클 플러스 SDK는 다음과 같은 사양에서 작동이 가능합니다. 안드로이드를 사용하는 모든 디바이스에서 사용이 가능하지만, 공식적으로 사용이 가능한 환경은 아래와 같습니다.
+
+요구 환경
+* Android를 지원하는 모바일(휴대폰) 디바이스
+* 인터넷이 상시로 연결되어 있어야 함.
+* Android 5.0 이상부터(API 21, Lollipop) Android 9.0 (API 28, Pie) 이하
+
+사용 라이브러리
+* Google / gson : https://github.com/google/gson
+
+app.gradle에 dependencies 추가하기.
+<pre><code>
+dependencies {
+ implementation 'com.google.code.gson:gson:2.8.5'
+}
+</code></pre>
+
+> NOTE : 위에 명시된 다른 환경에서 설치 및 사용이 가능하지만, 공식적이지 않은 환경에서의 오작동은 어썸잇(주)에서 보장하지 않습니다.
