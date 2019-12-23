@@ -94,3 +94,119 @@ dependencies {
 >NOTE : 예제에서는 사용법을 안내하기 위해 MainActivity에 Interface를 연결하였습니다.
 
 <h4> 7.2 기본적인 SDK의 동작 설명</h4>
+
+차량의 데이터를 수신하기전에 비이클 플러스 에이전트앱과 연결을 하기 위한 작업을 수행해야 합니다. <br>
+기본적으로 SDK는 에이전트앱과 연결할 수 있는 API들의 모음이며, 실제 차량과 통신 및 기타 작업을 수행하는 역할은 에이전트앱입니다.<br>
+SDK의 VehicleManager 클래스를 이용해서 에이전트앱과 상호작용을 할 수 있습니다. <br>
+VehicleManager 클래스를 사용할 클래스에 멤버로 지정하여 사용하면 편리합니다.<br>
+VehicleManager를 사용하기 위해 new 키워드로 Object 생성시 Context를 Parameter로 넘겨줘야합니다. <br>
+
+<pre><code>
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;import com.awesomeit.vehicleplus.library.api.VehicleManager;
+
+public class MainActivity extends AppCompatActivity {
+	private VehicleManager mVehicleManager = null;  
+  
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);  
+		setContentView(R.layout.activity_main);  
+  
+		mVehicleManager = new VehicleManager(getApplicationContext());
+	}
+}
+</code></pre>
+
+<h4>7.3. 에이전트앱과 연동하기</h4>
+VehicleManager를 생성하였다면, 본격적으로 에이전트앱과 연결하기를 구현합니다. <br>
+에이전트앱을 실행하기 위해서는 다음과 같은 단계를 거칩니다. <br>
+
+* connect(String, String) : void 호출
+* setOnConnectionListener(ConnectionListener) : boolean 호출
+* onConnected(void) : void 콜백 수신
+* subscribe(VehicleDataRequest, VehicleDataListener) : void 호출
+* start() : boolean 호출
+* onDataReceived(VPVehicleDataTable) : void 콜백 수신
+
+> NOTE : onDataReceived는 실제 데이터를 수신하는 콜백메서드로, JSON으로 만들어진 VPVehicleDataTable 객체를 수신합니다. VPVehicleDataTable은 String, VPVehicleData로 이루어진 HashMap을 멤버로 가지고 있습니다.
+
+<h4>7.4. 에이전트앱과 연결하기 (connect, setOnConnectionListener) </h4>
+에이전트앱과 SDK를 연결하기 위해서는 connect 메서드를 이용합니다. <br>
+connect 메서드를 사용하면 에이전트앱에서 허용된 RemoteService에 binding 할 수 있습니다.<br>
+connect 메서드를 실행하고 에이전트앱과 연결되면 onConnected 메서드가 콜백됩니다. 이때 onConnected 메서드의 콜백을 받기 위해서는 ConnectionListener 인터페이스를 구현(implements)하고, 리스너를 등록해주어야 합니다. 예제 코드는 다음과 같습니다. <br>
+
+<pre><code>
+public class MainActivity extends AppCompatActivity implements ConnectionListener {
+	private VehicleManager mVehicleManager = null;
+	private String mLicenseKey = "hdlgr8iTH/EoBtqBYPEDNtnUrKj/";
+	private String mDescription = "description for application";  
+
+	@Override  
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);  
+		setContentView(R.layout.activity_main);  
+  
+		mVehicleManager = new VehicleManager(this);  
+		mVehicleManager.setOnConnectionListener(this);
+	}
+  
+	@Override
+	protected void onStart() {  
+		super.onStart();
+		mVehicleManager.connect(mLicenseKey, mDescription);
+	}
+  
+	@Override  
+	public void onConnected() {  
+		// This callback method is called when the SDK and agent are connected.  
+	}  
+  
+	@Override  
+	public void onConnectionFailed(VPResultInfo vpResultInfo) {  
+
+	}  
+}
+</code></pre>
+
+<h4> 7.5. 인증시도하기 (Certifications)</h4>
+connect 메서드를 이용하여 연결 시도를 수행할때, connect 메서드의 파라미터를 확인해야합니다.<br>
+connect 메서드의 파라미터로는 2가지가 필요합니다. <br>
+첫번째는 어썸잇에서 발급해야하는 암호화된 인증키이며, 두번째는 앱을 설명할 문구입니다.<br>
+비이클 플러스와 SDK는 어썸잇에서 발급한 올바른 인증키가 있어야 정상적으로 작동됩니다.<br>
+connect를 통해 연결과 인증을 정상적으로 완료하면, 설치한 onConnected로 정상적으로 연결되었다는 콜백을 수신하게 됩니다.<br>
+연결을 수행하기가 실패되면, onConnectedFailed 메서드에 실패 사유와 함께 콜백이 수신됩니다.<br>
+
+>NOTE : 어썸잇에서 발급되는 인증키는 AES256으로 암호화된 String의 형태로 구성되어 있습니다. 간단한 등록절차를 통해 사용자 정보를 등록한 후 발급하고 있습니다. onConnectFailed 메서드의 실패 사유는 별도의 문서에 정의되어 있습니다.<br> VPResultInfo의 getResult 메서드를 호출하여 원인을 찾아서 해결해야 합니다.
+
+<h4> 7.6. 중단하기(disconnect)</h4>
+에이전트앱과 SDK의 연결을 끊을 수 있습니다. 앱의 종료 프로세스에 반드시 추가되어야 합니다.<br>
+disconnect 메서드 없이 종료는 할 수 있습니다만, 그렇게 되면 unbinding 및 exception이 발생할 수 있습니다. <br>
+
+<pre><code>
+private void stopVehicleData() {
+	mVehicleManager.disconnect();
+}</code></pre>
+
+<h4> 7.7. VehicleDataListener 연결하기 </h4>
+차량의 데이터를 수신하기 위해서는 SDK의 VehicleManager의 VehicleDataListener를 구현해야합니다. <br>
+VehicleDataListener를 구현하면 onReceived 메서드를 Override 해줘야합니다.
+
+<pre><code>
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import com.awesomeit.vehicleplus.library.api.VehicleDataListener;
+
+public class MainActivity extends AppCompatActivity implements VehicleDataListener {
+	@Override  
+	protected void onCreate(Bundle savedInstanceState) {  
+		super.onCreate(savedInstanceState);  
+		setContentView(R.layout.activity_main);  
+	} 
+  
+	@Override  
+	public void onDataReceived(VPVehicleDataTable vpVehicleDataTable) {  
+	// Here your application codes..  
+	}
+}
+</code></pre>
