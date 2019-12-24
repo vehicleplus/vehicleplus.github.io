@@ -330,3 +330,109 @@ public class DisplayType {
 </code></pre>
 
 >NOTE : 이후에 업데이트 되는 버전에 따라 DisplayType의 기능은 지속적으로 추가될 예정입니다. 버전마다 다를 수 있으니 제공되는 SDK의 DisplayType을 확인하시길 바랍니다.
+
+호출하고자 하는 화면에 따라 위의 정의된 DisplayType을 첫번째 파라미터로 전달하면 됩니다. 예제 코드는 다음과 같습니다.
+
+<pre><code>
+public void startVehicleSettingDisplay() {
+	mVehicleManager.startDisplay(DisplayType.DISPLAY_VEHICLE_SETTING);
+}
+</code></pre>
+
+<h4>7.14. 블루투스 설정하기</h4>
+사용자의 블루투스 어댑터를 검색하고 비이클 플러스앱에서 사용할 블루투스 어댑터를 등록하기 위한 화면을 불러옵니다. 다음과 같이 수행합니다.
+
+<pre><code>
+public void startBluetoothSettingDisplay() {
+	mVehicleManager.startDisplay(DisplayType.DISPLAY_BLUETOOTH_SETTING);
+}
+</code></pre>
+
+위의 메서드대로 호출하면, 비이클 플러스앱의 블루투스 연결하기 화면이 최상위로 올라옵니다. 사용자는 사용하는 블루투스 디바이스를 검색하고 설정할 수 있습니다.
+
+![](/resources/images/library_manual_image_02.png)
+
+>NOTE: 블루투스 디바이스는 현재 ELM327을 지원하는 디바이스만 지원됩니다. 다른 디바이스는 등록할 수 있으나 실제 통신시도시 작동하지 않습니다.
+
+<h4>7.15. 차량설정하기 </h4>
+사용자의 차량 정보(VehicleInfo)를 설정할 수 있습니다. 비이클 플러스앱에서 블루투스 디바이스 설정과 차량설정까지 완료되면, SDK에서는 subscribe 메서드로 수신이 가능합니다.
+
+<pre><code>
+public void startVehicleSettingsDisplay() {
+	mVehicleManager.startDisplay(DisplayType.DISPLAY_VEHICLE_SETTING);
+}
+</code></pre>
+
+![](/resources/images/library_manual_image_03.png)
+
+<h4>7.16. 지원 데이터 보기</h4>
+비이클 플러스앱에서 설정한 차종의 지원데이터를 확인 할 수 있습니다. 지원데이터는 분류되어있으며, 원하는 데이터가 비이클 플러스에서 지원하는지 확인할 수 있습니다.
+
+<pre><code>
+public void startSupportedVehicleDataDisplay() {
+	mVehicleManager.startDisplay(DisplayType.DISPLAY_SUPPORTED_VEHICLEDATA);
+}
+</code></pre>
+
+>NOTE: 데이터의 지원여부는 버전마다 다를 수 있습니다.
+
+![](/resources/images/library_manual_image_04.png)
+
+<h4>7.17. 통신 속도 설정하기 </h4>
+데이터의 통신 수신 속도를 설정할 수 있습니다. 공개버전에서는 최소 0.5초부터 최대 5초까지 0.5초 간격으로 설정할 수 있습니다.
+
+<pre><code>
+public void startTransferSpeedSettingsDisplay() {
+	mVehicleManager.startDisplay(DisplayType.DISPLAY_TRANSFER_SPEED_SETTING);
+}
+</code></pre>
+
+![](/resources/images/library_manual_image_05.png)
+
+<h4>7.18. 로그 보내기</h4>
+차량의 분석되지 않은 Raw 데이터를 어썸잇의 개발팀에게 보낼 수 있는 기능입니다.
+
+<pre><code>
+public void startSendLogDataDisplay() {
+	mVehicleManager.startDisplay(DisplayType.DISPLAY_SEND_LOG_DATA);
+}
+</code></pre>
+
+### 8. API 가이드
+API는 모두 제공되는 SDK에서 접근이 가능합니다. API는 다음과 같이 구성되어 있습니다.
+
+<h4>8.1. 패키지명 </h4>
+<b>com.awesomeit.vehicleplus.library</b><br>
+
+* com.awesomeit.vehicleplus.api
+* com.awesomeit.vehicleplus.api.constant
+
+<h4>8.2. com.awesomeit.vehicleplus.api </h4>
+유저 앱에 포함되어 사용할 수 있는 API들의 모음입니다.
+
+* VehicleManager
+* VehicleDataRequest
+* VehicleDataListener
+* ConnectionListener
+
+<h4>8.3. com.awesomeit.vehicleplus.api.model </h4>
+비이클 플러스의 Model 클래스들의 모음입니다. JSON anotation을 사용합니다.
+
+* VPBluetoothDeviceInfo
+* VPObject
+* VPResultInfo
+* VPVehicleData
+* VPVehicleDataTable
+* VPVehicleInfo
+
+<h4>8.4. com.awesomeit.vehicleplus.api.constant </h4>
+API를 사용하기 위해 상수로 지원되는 클래스들의 모음입니다.
+
+* ConnectionResult
+* DisplayType
+* VehicleDataType
+
+### 9. 지원 데이터
+<h4>지원 브랜드</h4>
+
+|:NO|:BrandName:|:Code:|:Remark:|
