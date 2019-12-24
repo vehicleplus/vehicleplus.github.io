@@ -4,5 +4,4 @@
 
 layout: home
 ---
-
-Hello VehiclePlus SDK developer!
+![](/resources/vehicleplus_main.png)
