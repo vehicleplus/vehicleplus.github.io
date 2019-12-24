@@ -4,4 +4,4 @@
 
 layout: home
 ---
-![](/resources/vehicleplus_main.png)
+![](/resources/images/vehicleplus_main.png)
