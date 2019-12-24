@@ -431,8 +431,3 @@ API를 사용하기 위해 상수로 지원되는 클래스들의 모음입니�
 * ConnectionResult
 * DisplayType
 * VehicleDataType
-
-### 9. 지원 데이터
-<h4>지원 브랜드</h4>
-
-|:NO|:BrandName:|:Code:|:Remark:|
