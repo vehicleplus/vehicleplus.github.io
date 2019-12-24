@@ -1,0 +1,25 @@
+---
+layout: page
+title: About
+permalink: /about/
+---
+
+### 1. 개요
+이 페이지에서는 개발자용 Vehicle Plus SDK (비이클 플러스 SDK)의 사용법에 대해서 설명합니다.
+비이클플러스 SDK는 비이클 플러스 앱을 사용하여 자동차데이터를 손쉽게 사용할 수 있는 개발환경입니다. 1.3.0 최신버전 기준 현재 안드로이드 환경에서 사용이 가능하며, 개발자용 SDK(Software Development Kit)와 에이전트앱을 제공합니다.
+<br>
+<br>
+### 2. Vehicle Plus Agent App 설치하기
+비이클 플러스  SDK는 첫번째로 Google Play에서 비이클 플러스앱을 설치해야 사용이 가능합니다.
+
+Google Play를 통해 제공되는 비이클 플러스는 일반 사용자에게 공개된 어플리케이션으로 차량과의 통신을 위해 필수적으로 설치되어야하며, 개발자는 이 문서와 함께 제공되는 SDK로 에이전트앱에 접근할 수 있습니다.
+
+비이클 플러스 앱 구글플레이 주소 : <br>
+https://play.google.com/store/apps/details?id=com.awesomeit.vehicleplus
+
+비이클 플러스 앱의 설치방법은 Google Play에서 일반적인 앱을 설치하는 방법과 동일합니다. 위의 URL에서 설치를 선택해서 진행하면 간단하게 완료할 수 있습니다. 
+<br>
+<br>
+> NOTE: <br>
+비이클 플러스 앱은 안드로이드 5.0 이상, 인터넷이 연결되어 있는 모바일에서만 지원합니다. <br>
+오프라인 환경에서만 사용가능한 프라이빗 버전은 관리자에게 별도로 문의해주시길 바랍니다.
