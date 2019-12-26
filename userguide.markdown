@@ -1,26 +1,55 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 layout: page
-title: UserGuide
+title: 유저가이드
 permalink: /userguide/
 ---
-### 7. Hello Vehicle Plus
-<h4> 7.1. 리스너 설치하기</h4>
-비이클 플러스에서 데이터를 수신하기 위해서는 데이터 수신을 하기 위한 리스너를 연결해줘야 합니다. 크게 2가지의 리스너가 있으며, 인터페이스로 구현되어 있으므로 사용할 클래스에 implements 해주면 됩니다.
+<!-- css style define -->
+<style>
+.center {
+    text-align: center;
+}
+</style>
 
->NOTE : 예제에서는 사용법을 안내하기 위해 MainActivity에 Interface를 연결하였습니다.
+<h1>목차</h1>
+ <ul>
+	<ol type="1" start="1">
+ 		<li><a href="#title_1">SDK 기본동작 설명</a></li>
+		<li><a href="#title_2">리스너 설치하기</a></li>
+		<li><a href="#title_3">비이클 플러스 연결 시나리오</a></li>
+		<li><a href="#title_4">비이클 플러스와 연결하기 (connect, setOnConnectionListener)</a></li>
+		<li><a href="#title_5">인증시도하기 (Certifications)</a></li>
+		<li><a href="#title_6">중단하기(disconnect)</a></li>
+		<li><a href="#title_7">VehicleDataListener 연결하기</a></li>
+		<li><a href="#title_8">VehicleDataRequest 만들기</a></li>
+		<li><a href="#title_9">데이터 수신하기</a></li>
+		<li><a href="#title_10">블루투스 기능 콜백 수신하기</a></li>
+		<li><a href="#title_11">선택된 차량정보 수신하기</a></li>
+		<li><a href="#title_12">onEventListener</a></li>
+		<li><a href="#title_13">비이클 플러스앱의 기능 사용하기</a></li>
+		<li><a href="#title_14">블루투스 설정하기</a></li>
+		<li><a href="#title_15">차량설정하기</a></li>
+		<li><a href="#title_16">지원 데이터 보기</a></li>
+		<li><a href="#title_17">통신 속도 설정하기</a></li>
+		<li><a href="#title_18">로그 보내기</a></li>
+		<li><a href="#title_19">API 가이드</a></li>
+			<ol type="a" start="a">
+				<li><a href="#title_19_a">패키지명</a></li>
+				<li><a href="#title_19_b">com.awesomeit.vehicleplus.api</a></li>
+				<li><a href="#title_19_c">com.awesomeit.vehicleplus.api.model</a></li>
+				<li><a href="#title_19_c">com.awesomeit.vehicleplus.api.constant</a></li>
+			</ol>
+	</ol>
+ </ul>
+<br>
 
-<h4> 7.2 기본적인 SDK의 동작 설명</h4>
-
-차량의 데이터를 수신하기전에 비이클 플러스 에이전트앱과 연결을 하기 위한 작업을 수행해야 합니다. <br>
-기본적으로 SDK는 에이전트앱과 연결할 수 있는 API들의 모음이며, 실제 차량과 통신 및 기타 작업을 수행하는 역할은 에이전트앱입니다.<br>
+<h3><div id="title_1">1. SDK 기본동작 설명</div></h3>
+비이클 플러스에서 차량의 데이터를 수신하기 위해, 비이클 플러스 앱과 연결을 진행해야합니다. <br>
+제공되는 SDK는 비이클 플러스와 연결할 수 있는 API들의 모음이며, 실제 차량과 통신 및 기능을 수행하는 역할은 비이클플러스앱입니다.<br>
 SDK의 VehicleManager 클래스를 이용해서 에이전트앱과 상호작용을 할 수 있습니다. <br>
 VehicleManager 클래스를 사용할 클래스에 멤버로 지정하여 사용하면 편리합니다.<br>
 VehicleManager를 사용하기 위해 new 키워드로 Object 생성시 Context를 Parameter로 넘겨줘야합니다. <br>
 
 <pre><code>
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;import com.awesomeit.vehicleplus.library.api.VehicleManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,9 +65,24 @@ public class MainActivity extends AppCompatActivity {
 }
 </code></pre>
 
-<h4>7.3. 에이전트앱과 연동하기</h4>
-VehicleManager를 생성하였다면, 본격적으로 에이전트앱과 연결하기를 구현합니다. <br>
-에이전트앱을 실행하기 위해서는 다음과 같은 단계를 거칩니다. <br>
+<br>
+<h3><div id="title_2">2. 리스너 설치하기</div></h3>
+비이클 플러스에서 데이터를 수신하기 위해서는 데이터 수신을 하기 위한 리스너를 연결해줘야 합니다. 크게 2가지의 리스너가 있으며, 인터페이스로 구현되어 있으므로 사용할 클래스에 implements 해주면 됩니다.
+
+* VehicleDataListener : 자동차 데이터의 수신을 위한 리스너.
+* ConnectionListener : 연결 관련 데이터의 수신을 위한 리스너.
+
+{:.center}
+![](/resources/images/vehicleplus-data-flow.png)
+
+>NOTE : 예제에서는 사용법을 안내하기 위해 MainActivity에 Interface를 연결하였습니다.
+<br>
+
+<br>
+
+<h3><div id="title_3">3. 비이클 플러스 연결 시나리오</div></h3>
+VehicleManager를 생성하였다면, 본격적으로 비이클플러스와 연결하기를 구현합니다. <br>
+비이클 플러스를 실행하기 위해서는 다음과 같은 단계가 필요합니다. <br>
 
 * connect(String, String) : void 호출
 * setOnConnectionListener(ConnectionListener) : boolean 호출
@@ -49,10 +93,12 @@ VehicleManager를 생성하였다면, 본격적으로 에이전트앱과 연결�
 
 > NOTE : onDataReceived는 실제 데이터를 수신하는 콜백메서드로, JSON으로 만들어진 VPVehicleDataTable 객체를 수신합니다. VPVehicleDataTable은 String, VPVehicleData로 이루어진 HashMap을 멤버로 가지고 있습니다.
 
-<h4>7.4. 에이전트앱과 연결하기 (connect, setOnConnectionListener) </h4>
-에이전트앱과 SDK를 연결하기 위해서는 connect 메서드를 이용합니다. <br>
-connect 메서드를 사용하면 에이전트앱에서 허용된 RemoteService에 binding 할 수 있습니다.<br>
-connect 메서드를 실행하고 에이전트앱과 연결되면 onConnected 메서드가 콜백됩니다. 이때 onConnected 메서드의 콜백을 받기 위해서는 ConnectionListener 인터페이스를 구현(implements)하고, 리스너를 등록해주어야 합니다. 예제 코드는 다음과 같습니다. <br>
+<br>
+
+<h3><div id="title_4">4. 비이클 플러스와 연결하기 (connect, setOnConnectionListener)</div></h3>
+비이클 플러스와 비이클 플러스 SDK를 연결하기 위해서는 connect 메서드를 이용합니다. <br>
+connect 메서드를 사용하면 비이클 플러스에서 허용된 RemoteService에 binding 할 수 있습니다.<br>
+connect 메서드를 실행하고 비이클 플러스와 연결되면 onConnected 메서드가 콜백됩니다. 이때 onConnected 메서드의 콜백을 받기 위해서는 ConnectionListener 인터페이스를 구현(implements)하고, 리스너를 등록해주어야 합니다. 예제 코드는 다음과 같습니다. <br>
 
 <pre><code>
 public class MainActivity extends AppCompatActivity implements ConnectionListener {
@@ -87,7 +133,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionListene
 }
 </code></pre>
 
-<h4> 7.5. 인증시도하기 (Certifications)</h4>
+<br>
+<br>
+
+<h3><div id="title_5">5. 인증시도하기 (Certifications)</div></h3>
 connect 메서드를 이용하여 연결 시도를 수행할때, connect 메서드의 파라미터를 확인해야합니다.<br>
 connect 메서드의 파라미터로는 2가지가 필요합니다. <br>
 첫번째는 어썸잇에서 발급해야하는 암호화된 인증키이며, 두번째는 앱을 설명할 문구입니다.<br>
@@ -97,8 +146,10 @@ connect를 통해 연결과 인증을 정상적으로 완료하면, 설치한 on
 
 >NOTE : 어썸잇에서 발급되는 인증키는 AES256으로 암호화된 String의 형태로 구성되어 있습니다. 간단한 등록절차를 통해 사용자 정보를 등록한 후 발급하고 있습니다. onConnectFailed 메서드의 실패 사유는 별도의 문서에 정의되어 있습니다.<br> VPResultInfo의 getResult 메서드를 호출하여 원인을 찾아서 해결해야 합니다.
 
-<h4> 7.6. 중단하기(disconnect)</h4>
-에이전트앱과 SDK의 연결을 끊을 수 있습니다. 앱의 종료 프로세스에 반드시 추가되어야 합니다.<br>
+<br>
+
+<h3><div id="title_6">6. 중단하기(disconnect)</div></h3>
+비이클플러스와 비이클 플러스 SDK의 연결을 끊을 수 있습니다. 앱의 종료 프로세스에 반드시 추가되어야 합니다.<br>
 disconnect 메서드 없이 종료는 할 수 있습니다만, 그렇게 되면 unbinding 및 exception이 발생할 수 있습니다. <br>
 
 <pre><code>
@@ -106,7 +157,9 @@ private void stopVehicleData() {
 	mVehicleManager.disconnect();
 }</code></pre>
 
-<h4> 7.7. VehicleDataListener 연결하기 </h4>
+<br>
+
+<h3><div id="title_7">7. VehicleDataListener 연결하기</div></h3>
 차량의 데이터를 수신하기 위해서는 SDK의 VehicleManager의 VehicleDataListener를 구현해야합니다. <br>
 VehicleDataListener를 구현하면 onReceived 메서드를 Override 해줘야합니다.
 
@@ -129,9 +182,13 @@ public class MainActivity extends AppCompatActivity implements VehicleDataListen
 }
 </code></pre>
 
-비이클 플러스 에이전트앱에 연결 후 subscribe(VehicleDataRequest, VehicleDataListener)를 이용하여 데이터를 수신할 수 있습니다. subscribe 메서드를 호출하고 에이전트앱에 정상적으로 연결되어 있다면, onDataReceived(VPVehicleDataTable) 메서드가 콜백됩니다. 에이전트앱이 데이터 통신 성공을 하면 HashMap 형태의 Paramter에 데이터가 전달되며, 사용자는 이 객체를 원하는 형태로 사용하면 됩니다.
+비이클 플러스에 연결 후 subscribe(VehicleDataRequest, VehicleDataListener)를 이용하여 데이터를 수신할 수 있습니다. <br>
+subscribe 메서드를 호출하고 비이클플러스에 정상적으로 연결되어 있다면, onDataReceived(VPVehicleDataTable) 메서드가 콜백됩니다. <br>
+비이클 플러스가 데이터 통신 성공을 하면 HashMap 형태의 Paramter에 데이터가 전달되며, 사용자는 이 객체를 원하는 형태로 사용하면 됩니다.
 
-<h4>7.8. VehicleDataRequest 만들기</h4>
+<br>
+
+<h3><div id="title_8">8. VehicleDataRequest 만들기</div></h3>
 subscribe를 호출하기전에 비이클 플러스에게 요청할 데이터 리스트를 작성해야 합니다.<br>
 SDK에서는 VehicleDataRequest 클래스를 제공하고 여기에 addDataElement를 통해 원하는 데이터를 지정하여 사용할 수 있습니다.<br>
 VehicleDataRequest 사용법은 build 패턴을 이용하여 간단히 사용할 수 있으며 예제 코드는 다음과 같습니다.
@@ -139,39 +196,42 @@ VehicleDataRequest 사용법은 build 패턴을 이용하여 간단히 사용할
 <pre><code>
 private void getVehicleData() {
 	VehicleDataRequest request = new VehicleDataRequest.Builder()  
-			.addDataElement(VehicleData.Diesel.soot) // testing not supported.  
-			.addDataElement(VehicleData.Battery.battery_charge_current)  
-			.addDataElement(VehicleData.Battery.battery_charge_remain)  
-			.build();  
+		.addDataElement(VehicleData.Diesel.soot)
+		.addDataElement(VehicleData.Battery.battery_charge_current)  
+		.addDataElement(VehicleData.Battery.battery_charge_remain)  
+		.build();  
 }
 </code></pre>
 >NOTE : addDataElement(VehicleData) 및 addDataElementGroup(int[])로 데이터 리스트를 추가할 수 있습니다.
 
-<h4>7.9. 데이터 수신하기</h4>
+<br>
+
+<h3><div id="title_9">9. 데이터 수신하기</div></h3>
 VehicleDataRequest와 VehicleDataListener를 정상적으로 설치하였으면 subscribe와 start를 통해 데이터 수신을 시작할 수 있습니다. 중단은 반드시 disconnect 메서드를 이용해 중단해야 합니다.
 
 <pre><code>
-private  void  getVehicleData() {
+private void getVehicleData() {
 
 	VehicleDataRequest request = new VehicleDataRequest.Builder()  
-				.addDataElement(VehicleData.Diesel.soot)
-				.addDataElement(VehicleData.Battery.battery_charge_current)  
-				.addDataElement(VehicleData.Battery.battery_charge_remain)  
-				.build();
+			.addDataElement(VehicleData.Diesel.soot)
+			.addDataElement(VehicleData.Battery.battery_charge_current)  
+			.addDataElement(VehicleData.Battery.battery_charge_remain)  
+			.build();
 
 	mVehicleManager.subscribe(request, this);
 	mVehicleManager.start();
 }
 </code></pre>
 
->NOTE : 지정되지 않은 번호의 인덱스를 addDataElement에 추가할 수는 있지만, 적합하지 않으면 에이전트앱에서 해당 데이터는 발신하지 않습니다.
+>NOTE : 지정되지 않은 번호의 인덱스를 addDataElement에 추가할 수는 있지만, 적합하지 않으면 비이클 플러스에서 해당 데이터는 발신하지 않습니다.
 
-<h4>7.10. 블루투스 기능 콜백 수신하기</h4>
+<br>
+
+<h3><div id="title_10">10. 블루투스 기능 콜백 수신하기</div></h3>
 ConnectionListener에는 onConnected(), onConnectionFailed(VPResultInfo)외에 블루투스 연결 확인을 위한 콜백도 지원합니다. <br>
 비이클 플러스앱의 블루투스 연결상태를 파악할 수 있으며, 상태 변경에 대한 콜백수신이 가능합니다. 예제 코드는 다음과 같습니다.
 
 <pre><code>
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import com.awesomeit.vehicleplus.library.api.VehicleDataListener;
 
@@ -194,15 +254,17 @@ public class MainActivity extends AppCompatActivity implements VehicleDataListen
 }
 </code></pre>
 
-비이클 플러스에서 블루투스가 연결된 경우 onBluetoothConnected에 연결된 BluetoothDeviceInfo가 수신됩니다. VPBluetoothDeviceInfo 클래스는 Getter 메서드로 연결된 블루투스의 MacAddress를 얻을 수 있습니다.
+비이클 플러스에서 블루투스가 연결된 경우 onBluetoothConnected에 연결된 BluetoothDeviceInfo가 수신됩니다. <br>
+VPBluetoothDeviceInfo 클래스는 Getter 메서드로 연결된 블루투스의 MacAddress를 얻을 수 있습니다.
 블루투스의 상태가 변경될 때 마다 onBluetoothChanged에 Notify가 수신됩니다.
 
-<h4>7.11. 선택된 차량정보 수신하기</h4>
+<br>
+
+<h3><div id="title_11">11. 선택된 차량정보 수신하기</div></h3>
 ConnectionListener에는 선택된 차량정보를 수신할 수 있는 콜백메서드가 존재합니다.  
 VehicleManager를 통해 getVehicleInfo를 호출하면, 현재 비이클 플러스에서 선택된 차량정보를 콜백메서드로 수신이 가능합니다.
 
 <pre><code>
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import com.awesomeit.vehicleplus.library.api.VehicleDataListener;
 
@@ -220,10 +282,14 @@ public class MainActivity extends AppCompatActivity implements VehicleDataListen
 }
 </code></pre>
 
-<h4>7.12. onEventListener </h4>
+<br>
+
+<h3><div id="title_12">12. onEventListener</div></h3>
 ConnectionListener에서는 onEventListener(String, String) 콜백메서드도 구현해야합니다. 이 Event는 SDK의 하위호환성을 위해 생성한것으로 당장 사용되지는 않습니다.
 
-<h4>7.13. 에이전트앱의 기능 사용하기</h4>
+<br>
+
+<h3><div id="title_13">13. 비이클 플러스앱의 기능 사용하기</div></h3>
 
 * 블루투스 설정하기
 * 차량설정하기
@@ -231,13 +297,13 @@ ConnectionListener에서는 onEventListener(String, String) 콜백메서드도 �
 * 통신 속도 설정하기
 * 로그 보내기
 
-인증하기까지의 초기화 작업을 정상적으로 수행하면, 이후부터는 에이전트앱의 기능들을 사용할 수 있습니다.<br>
-에이전트앱의 기능은 순서에 상관없이 원하는대로 사용이 가능합니다.
-공개된 버전에서의 해당기능은 SDK의 코드레벨에서의 접근이 아닌, 에이전트앱의 화면을 불러와서 기능을 수행하는 방법을 사용합니다.
+인증하기까지의 초기화 작업을 정상적으로 수행하면, 이후부터는 비이클 플러스의 기능들을 사용할 수 있습니다.<br>
+비이클 플러스의 기능은 순서에 상관없이 원하는대로 사용이 가능합니다.
+공개된 버전에서의 해당기능은 SDK의 코드레벨에서의 접근이 아닌, 비이클 플러스의 화면을 불러와서 기능을 수행하는 방법을 사용합니다.
 
 > NOTE : 블루투스 어댑터 설정 및 차량정보를 설정하지 않은 상태에서는 SDK의 데이터 통신이 정상적으로 작동되지 않습니다.
 
-에이전트앱의 화면을 불러오는 메서드는 모두 startDisplay(DisplayType) 을 이용합니다. DisplayType은 다음과 같이 정리되어 있습니다.
+비이클 플러스의 화면을 불러오는 메서드는 모두 startDisplay(DisplayType) 을 이용합니다. DisplayType은 다음과 같이 정리되어 있습니다.
 
 <pre><code>
 public class DisplayType {
@@ -257,8 +323,10 @@ public void startVehicleSettingDisplay() {
 }
 </code></pre>
 
-<h4>7.14. 블루투스 설정하기</h4>
-사용자의 블루투스 어댑터를 검색하고 비이클 플러스앱에서 사용할 블루투스 어댑터를 등록하기 위한 화면을 불러옵니다. 다음과 같이 수행합니다.
+<br>
+
+<h3><div id="title_14">14. 블루투스 설정하기</div></h3>
+사용자의 블루투스 어댑터를 검색하고 비이클 플러스에서 사용할 블루투스 어댑터를 등록하기 위한 화면을 불러옵니다. 다음과 같이 수행합니다.
 
 <pre><code>
 public void startBluetoothSettingDisplay() {
@@ -266,14 +334,17 @@ public void startBluetoothSettingDisplay() {
 }
 </code></pre>
 
-위의 메서드대로 호출하면, 비이클 플러스앱의 블루투스 연결하기 화면이 최상위로 올라옵니다. 사용자는 사용하는 블루투스 디바이스를 검색하고 설정할 수 있습니다.
+위의 메서드대로 호출하면, 비이클 플러스의 블루투스 연결하기 화면이 최상위로 올라옵니다. 사용자는 사용하는 블루투스 디바이스를 검색하고 설정할 수 있습니다.
 
+{:.center}
 ![](/resources/images/library_manual_image_02.png)
 
 >NOTE: 블루투스 디바이스는 현재 ELM327을 지원하는 디바이스만 지원됩니다. 다른 디바이스는 등록할 수 있으나 실제 통신시도시 작동하지 않습니다.
 
-<h4>7.15. 차량설정하기 </h4>
-사용자의 차량 정보(VehicleInfo)를 설정할 수 있습니다. 비이클 플러스앱에서 블루투스 디바이스 설정과 차량설정까지 완료되면, SDK에서는 subscribe 메서드로 수신이 가능합니다.
+<br>
+
+<h3><div id="title_15">15. 차량설정하기</div></h3>
+사용자의 차량 정보(VehicleInfo)를 설정할 수 있습니다. 비이클 플러스에서 블루투스 디바이스 설정과 차량설정까지 완료되면, SDK에서는 subscribe 메서드로 수신이 가능합니다.
 
 <pre><code>
 public void startVehicleSettingsDisplay() {
@@ -281,10 +352,13 @@ public void startVehicleSettingsDisplay() {
 }
 </code></pre>
 
+{:.center}
 ![](/resources/images/library_manual_image_03.png)
 
-<h4>7.16. 지원 데이터 보기</h4>
-비이클 플러스앱에서 설정한 차종의 지원데이터를 확인 할 수 있습니다. 지원데이터는 분류되어있으며, 원하는 데이터가 비이클 플러스에서 지원하는지 확인할 수 있습니다.
+<br>
+
+<h3><div id="title_16">16. 지원 데이터 보기</div></h3>
+비이클 플러스에서 설정한 차종의 지원데이터를 확인 할 수 있습니다. 지원데이터는 분류되어있으며, 원하는 데이터가 비이클 플러스에서 지원하는지 확인할 수 있습니다.
 
 <pre><code>
 public void startSupportedVehicleDataDisplay() {
@@ -294,9 +368,12 @@ public void startSupportedVehicleDataDisplay() {
 
 >NOTE: 데이터의 지원여부는 버전마다 다를 수 있습니다.
 
+{:.center}
 ![](/resources/images/library_manual_image_04.png)
 
-<h4>7.17. 통신 속도 설정하기 </h4>
+<br>
+
+<h3><div id="title_17">17. 통신 속도 설정하기</div></h3>
 데이터의 통신 수신 속도를 설정할 수 있습니다. 공개버전에서는 최소 0.5초부터 최대 5초까지 0.5초 간격으로 설정할 수 있습니다.
 
 <pre><code>
@@ -305,9 +382,12 @@ public void startTransferSpeedSettingsDisplay() {
 }
 </code></pre>
 
+{:.center}
 ![](/resources/images/library_manual_image_05.png)
 
-<h4>7.18. 로그 보내기</h4>
+<br>
+
+<h3><div id="title_18">18. 로그 보내기</div></h3>
 차량의 분석되지 않은 Raw 데이터를 어썸잇의 개발팀에게 보낼 수 있는 기능입니다.
 
 <pre><code>
@@ -316,16 +396,18 @@ public void startSendLogDataDisplay() {
 }
 </code></pre>
 
-### 8. API 가이드
+<br>
+
+<h3><div id="title_19">19. API 가이드</div></h3>
 API는 모두 제공되는 SDK에서 접근이 가능합니다. API는 다음과 같이 구성되어 있습니다.
 
-<h4>8.1. 패키지명 </h4>
+<h4><div id="title_19_a">a. 패키지명</div></h4>
 <b>com.awesomeit.vehicleplus.library</b><br>
 
 * com.awesomeit.vehicleplus.api
 * com.awesomeit.vehicleplus.api.constant
 
-<h4>8.2. com.awesomeit.vehicleplus.api </h4>
+<h4><div id="title_19_b">b. com.awesomeit.vehicleplus.api</div></h4>
 유저 앱에 포함되어 사용할 수 있는 API들의 모음입니다.
 
 * VehicleManager
@@ -333,7 +415,7 @@ API는 모두 제공되는 SDK에서 접근이 가능합니다. API는 다음과
 * VehicleDataListener
 * ConnectionListener
 
-<h4>8.3. com.awesomeit.vehicleplus.api.model </h4>
+<h4><div id="title_19_c">c. com.awesomeit.vehicleplus.api.model</div></h4>
 비이클 플러스의 Model 클래스들의 모음입니다. JSON anotation을 사용합니다.
 
 * VPBluetoothDeviceInfo
@@ -343,7 +425,7 @@ API는 모두 제공되는 SDK에서 접근이 가능합니다. API는 다음과
 * VPVehicleDataTable
 * VPVehicleInfo
 
-<h4>8.4. com.awesomeit.vehicleplus.api.constant </h4>
+<h4><div id="title_19_d">d. com.awesomeit.vehicleplus.api.constant</div></h4>
 API를 사용하기 위해 상수로 지원되는 클래스들의 모음입니다.
 
 * ConnectionResult

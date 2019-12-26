@@ -4,4 +4,11 @@
 
 layout: home
 ---
+{:.center}
 ![](/resources/images/vehicleplus_main.png)
+
+<style>
+.center {
+    text-align: center;
+}
+</style>
