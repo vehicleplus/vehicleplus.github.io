@@ -6,7 +6,7 @@ permalink: /about/
 
 <!-- 상단으로 이동하기 버튼 -->
 <a href="#" class="btn_gotop">
-<img src="/resources/images/baseline_keyboard_arrow_up_black_48dp.png" style="width:60px">
+<img src="/resources/images/baseline_keyboard_arrow_up_black_48dp.png" style="width:30px">
 <span class="glyphicon glyphicon-chevron-up">
 </span>
 </a>
