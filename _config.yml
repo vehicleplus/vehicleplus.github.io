@@ -18,13 +18,13 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: VehiclePlus SDK Developer
+title: 어썸커넥트 SDK 개발자페이지
 email: android-support@awesomeit.co.kr
 description: >- # this means to ignore newlines until "baseurl:"
-  이 블로그는 어썸잇(주)의 VehiclePlus SDK를 위한 개발자 블로그입니다.
-  VehiclePlus는 자동차 서비스를 위한 자동차데이터 플랫폼으로
+  이 블로그는 어썸잇(주)의 어썸커넥트 SDK를 위한 개발자페이지입니다.
+  어썸커넥트는 자동차 서비스를 위한 자동차데이터 개발자도구로
   전 세계의 다양한 자동차 데이터를 손쉽게 확인할 수 있습니다.
-  VehiclePlus를 이용한 다양한 자동차 서비스를 구현하세요.
+  어썸커넥트 SDK를 이용한 다양한 자동차 서비스를 구현하세요.
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
