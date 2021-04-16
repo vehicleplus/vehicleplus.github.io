@@ -1,0 +1,840 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>JSON 규격 정의</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="f2395183-f476-4754-9093-e73e1ad44a3f" class="page sans"><header><h1 class="page-title">JSON 규격 정의</h1></header><div class="page-body"><p id="e9a86afc-a68d-46fb-a186-7e58c6c9a3c7" class="">
+</p><p id="83672753-e18e-4a9c-a574-4a214d5e2211" class="">텍스트형: SimpleResponse
+테이블형, 발화 제안형: TextListResponse
+버튼 제안형, 복수버튼 제안형, 상품 목록형: ButtonListResponse
+날씨형 WeatherListResponse
+위치 목록형 LocationListResponse</p><p id="a0bdb91b-bbe0-42e2-ac94-0489181b8b4a" class="">직접 입력형: InputResponse</p><p id="ed47bda4-c046-4ccc-8b09-498a8d58d1ff" class="">강제 이동형: ForceResponse</p><p id="7066e1e2-d136-45ea-8646-657aa572efa9" class="">
+</p><pre id="b4875e53-5fbf-44c5-b662-f0ce9bf97e4f" class="code"><code>// 텍스트형
+{ 
+	&quot;SimpleResponse&quot;: {
+		&quot;textToSpeech&quot;: &quot;안녕하세요? 카피치입니다.&quot;
+	}
+}</code></pre><p id="3868f8d2-9ef5-4a81-a486-f29fc22b9a55" class="">
+</p><pre id="c68f5282-5266-4475-aad2-97a39620f657" class="code"><code>// 테이블형
+{ 
+	&quot;TextListResponse&quot;: {
+		&quot;title&quot;: &quot;싼타페 2020년식 디젤정보입니다.&quot;,
+		&quot;subTitle&quot;: &quot;&quot;,
+		&quot;textList&quot;: [
+			{
+				&quot;key&quot;: &quot;연비&quot;,
+				&quot;value&quot;: &quot;24km/l&quot;
+			},
+			{
+				&quot;key&quot;: &quot;신차가격&quot;,
+				&quot;value&quot;: &quot;2,000만원&quot;
+			},
+			{
+				&quot;key&quot;: &quot;미션(변속기)&quot;,
+				&quot;value&quot;: &quot;오토(A/T)&quot;
+			}
+		]
+	}
+}</code></pre><p id="f41f7d1e-36f9-43bc-8240-5171b9a3e599" class="">
+</p><pre id="51c4623c-23cf-49ca-a0ac-535e568e9f3c" class="code"><code>// 발화 제안형
+{ 
+	&quot;TextListResponse&quot;: {
+		&quot;title&quot;: &quot;50,000원 주유를 기록했습니다.\n이번달 누적 주유비 : 304,304원&quot;,
+		&quot;subTitle&quot;: &quot;아래와 같이 말해 기록된 주유비를 확인할 수 있어요&quot;,
+		&quot;textList&quot;: [
+			{
+				&quot;key&quot;: &quot;주유비&quot;,
+				&quot;value&quot;: &quot;이번달 주유비 알려줘&quot;
+			}
+		]
+	}
+}</code></pre><p id="ac0ba947-ee3a-44fa-8179-e8f1c0331af8" class="">
+</p><pre id="a25a3acf-02db-4f12-903e-78a9f58f5c3b" class="code"><code>// 버튼 제안형
+{ 
+	&quot;ButtonListResponse&quot;: {
+		&quot;title&quot;: &quot;주행 기록 정보가 없습니다.&quot;,
+		&quot;subTitle&quot;: &quot;다른 기간에 기록된 주행정보가 궁금하다면\n더 보기 버튼을 눌러주세요.&quot;,
+		&quot;buttonList&quot;: [
+			{
+				&quot;title&quot;: &quot;더 보기&quot;,
+				&quot;subtitle&quot;: &quot;&quot;,
+				&quot;imagePath&quot;: &quot;&quot;,
+				&quot;openUrlAction&quot;: {
+					&quot;url&quot;: &quot;carpeach://gas.launch?gas_station_id=1000&quot;,
+					&quot;urlTypeHint&quot;: &quot;&quot;,
+				}
+			}
+		]
+	}
+}</code></pre><p id="7741fda0-7394-43ee-ab40-0414b6becb35" class="">
+</p><pre id="ffe664eb-b8a3-47f8-8c21-f11cfbd7b1cd" class="code"><code>// 복수 버튼 제안형
+{ 
+	&quot;ButtonListResponse&quot;: {
+		&quot;title&quot;: &quot;가입한 보험사 이름을 말씀해주세요.&quot;,
+		&quot;subTitle&quot;: &quot;&quot;,
+		&quot;buttonList&quot;: [
+			{
+				&quot;title&quot;: &quot;삼성화재&quot;,
+				&quot;subtitle&quot;: &quot;&quot;,
+				&quot;imagePath&quot;: &quot;&quot;,
+				&quot;openUrlAction&quot;: {
+					&quot;url&quot;: &quot;speech://삼성화재&quot;,
+					&quot;urlTypeHint&quot;: &quot;&quot;
+				}
+			},
+			{
+				&quot;title&quot;: &quot;한화생명&quot;,
+				&quot;subtitle&quot;: &quot;&quot;,
+				&quot;imagePath&quot;: &quot;&quot;,
+				&quot;openUrlAction&quot;: {
+					&quot;url&quot;: &quot;speech://한화생명&quot;,
+					&quot;urlTypeHint&quot;: &quot;&quot;
+				}
+			},
+			{
+				&quot;title&quot;: &quot;DB보험&quot;,
+				&quot;subtitle&quot;: &quot;&quot;,
+				&quot;imagePath&quot;: &quot;&quot;,
+				&quot;openUrlAction&quot;: {
+					&quot;url&quot;: &quot;speech://DB보험&quot;,
+					&quot;urlTypeHint&quot;: &quot;&quot;
+				}
+			}
+		]
+	}
+}</code></pre><p id="8400e672-af2e-4902-9ace-80d5447ad23d" class="">
+</p><p id="dbce58c9-f656-43f7-be01-9a4e229a209e" class="">
+</p><pre id="be023c3e-763f-4a3c-b2ee-1430ca38cb6c" class="code"><code>// 상품 목록형
+{ 
+	&quot;ButtonListResponse&quot;: {
+		&quot;title&quot;: &quot;싼타페의 에어컨 필터 정보입니다.&quot;,
+		&quot;subTitle&quot;: &quot;&quot;,
+		&quot;buttonList&quot;: [
+		{
+			&quot;title&quot;: &quot;에어컨필터 1 기본형&quot;,
+			&quot;subTitle&quot;: &quot;10,800원&quot;,
+			&quot;imagePath&quot;: &quot;https://img1.daumcdn.net/thumb/R720x0.q80/?scode=mtistory2&amp;fname=http%3A%2F%2Fcfile10.uf.tistory.com%2Fimage%2F021F9E4651C0AA450F6B82&quot;,
+			&quot;openUrlAction&quot;: {
+				&quot;title&quot;: &quot;더 보기&quot;,
+				&quot;url&quot;: &quot;https://www.daum.net&quot;
+			}
+		},
+		{
+			&quot;title&quot;: &quot;에어컨필터 2 고급형&quot;,
+			&quot;subTitle&quot;: &quot;25,750원&quot;,
+			&quot;imagePath&quot;: &quot;http://img.danawa.com/prod_img/500000/446/458/img/4458446_1.jpg?shrink=500:500&amp;_v=20160921110656&quot;,
+				&quot;openUrlAction&quot;: {
+				&quot;title&quot;: &quot;더 보기&quot;,
+				&quot;url&quot;: &quot;https://www.danawa.com&quot;
+			}
+		}
+		]
+	}
+}</code></pre><p id="fcac08c9-c8ec-42ed-9402-629475992c70" class="">
+</p><pre id="301fadc9-5bf0-4d03-90a9-42a0cfe93851" class="code"><code>// 날씨형
+{ 
+	&quot;WeatherListResponse&quot;: {
+		&quot;title&quot;: &quot;세차하기 좋은 날이에요&quot;,
+		&quot;subTitle&quot;: &quot;오늘부터 5일동안 눈/비 소식이 없어요.&quot;,
+		&quot;location&quot;: &quot;서울시 2021-02-05 기준&quot;,
+		&quot;weatherList&quot;: 
+		[
+			{
+				&quot;temp&quot;: {
+					&quot;temp&quot;: 18.53,
+					&quot;feels_like&quot;: 17.09,
+					&quot;temp_min&quot;: 18.03,
+					&quot;temp_max&quot;: 18.53,
+				},
+				&quot;weather&quot;: [
+					{
+						&quot;main&quot;: &quot;Clouds&quot;,
+						&quot;description&quot;: &quot;구름조금&quot;,
+					}
+				]
+			},
+			{
+				&quot;temp&quot;: {
+					&quot;temp&quot;: 18.53,
+					&quot;feels_like&quot;: 17.09,
+					&quot;temp_min&quot;: 18.03,
+					&quot;temp_max&quot;: 18.53,
+				},
+				&quot;weather&quot;: [
+					{
+						&quot;main&quot;: &quot;Clouds&quot;,
+						&quot;description&quot;: &quot;구름조금&quot;,
+					}
+				]
+			}
+		]
+	}
+}</code></pre><p id="da977206-6711-416d-b99c-2e23cce8be5e" class="">
+</p><pre id="e81bc32d-0dbf-41d6-98c9-11531b23d0df" class="code"><code>// 위치 목록형
+{
+	&quot;LocationListResponse&quot;: {
+		&quot;title&quot;: &quot;내 주유소 정보입니다.&quot;,
+		&quot;locationList&quot;: [
+			{
+				&quot;iconImage&quot;: &quot;https://blog.kakaocdn.net/dn/cp7EVl/btqxZqM9YHp/pWWpCRbjIQlAi4REtVNlw1/img.jpg&quot;,
+				&quot;title&quot;: &quot;GS 21세기 셀프 주유소&quot;,
+				&quot;subTitle&quot;: &quot;1,578원/L&quot;,
+				&quot;textList&quot;: [
+					{
+						&quot;key&quot;: &quot;연료&quot;,
+						&quot;value&quot;: &quot;휘발유&quot;
+					},
+					{
+						&quot;key&quot;: &quot;거리&quot;,
+						&quot;value&quot;: &quot;559m&quot;
+					},
+					{
+						&quot;key&quot;: &quot;지난주 대비&quot;,
+						&quot;value&quot;: &quot;+10원&quot;
+					}
+				]
+			}
+		]
+	}
+}</code></pre><div id="86f52509-0073-431c-b609-254741e0a9e2" class="column-list"><div id="d0079a7a-ad11-4964-b22b-2f86745285f7" style="width:93.75%" class="column"><pre id="d936535c-50df-4c94-a56a-171f5324caca" class="code"><code>// 직접 입력형
+{ 
+	&quot;InputResponse&quot;: {
+		&quot;title&quot;: &quot;오늘 날짜로 엔진오일 교체를 기록했습니다.&quot;,
+		&quot;subTitle&quot;: &quot;날짜 수정을 원하시면 아래 버튼을 눌러주세요.&quot;,
+		&quot;inputType&quot;: &quot;text&quot; // (text : 일반 텍스트 입력, date : 날짜 입력)
+	}
+}</code></pre></div><div id="61684704-713a-4812-85f4-ab26905fd370" style="width:6.25%" class="column"><p id="10e7e31d-b278-4adc-ac26-beedcead4a53" class="">
+</p></div></div><pre id="d43a4b12-33a2-4542-988b-c029df165670" class="code"><code>// 강제이동형
+{
+	&quot;ForceResponse&quot;: {
+		&quot;title&quot;: &quot;메인화면으로 이동합니다.&quot;,
+		&quot;subTitle&quot;: &quot;주유하신 정보가 없습니다. 메인화면으로 이동합니다.&quot;,
+		&quot;imagePath&quot;: &quot;&quot;,
+		&quot;openUrlAction&quot;: {
+			&quot;url&quot;: &quot;carpeach://gas.launch?gas_station_id=1000&quot;,
+			&quot;urlTypeHint&quot;: &quot;&quot;,
+		}
+	}
+}</code></pre><p id="1b222ba2-aeb9-4f1b-a8a2-47e270f4989f" class="">
+</p></div></article></body></html>
